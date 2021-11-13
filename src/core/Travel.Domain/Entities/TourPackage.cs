@@ -5,7 +5,7 @@ using Travel.Domain.Enums;
 
 namespace Travel.Domain.Entities
 {
-    public class TourPackage
+    public class `
     {
         public int Id { get; set; }
         public int ListId { get; set; }
