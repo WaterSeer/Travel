@@ -15,10 +15,6 @@
     <ProjectReference Include="..\Travel.Domain\Travel.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="TourPackages\UpdateTourPackageDetail\" />
-  </ItemGroup>
-
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
   </PropertyGroup>
