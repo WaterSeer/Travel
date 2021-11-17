@@ -16,7 +16,6 @@ using Travel.Data.Contexts;
 using Travel.Application;
 using Travel.Data;
 using Travel.Shared;
-using Travel.WebApi.Filter;
 using Travel.WebApi.Filters;
 
 namespace Travel.WebApi
