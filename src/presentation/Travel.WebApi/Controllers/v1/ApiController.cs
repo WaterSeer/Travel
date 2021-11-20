@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Travel.WebApi.Controllers
+namespace Travel.WebApi.Controllers.v1
 {
+    [ApiVersion("1.0")]
     [ApiController]
-    [Route("api/[contriller]")]
+    [Route("api/v{version:apiVersion}/[contriller]")]
     public abstract class ApiController : ControllerBase
     {
         private IMediator _mediator;
