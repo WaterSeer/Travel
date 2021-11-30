@@ -11,12 +11,14 @@ using Serilog;
 using Serilog.Events;
 using Serilog.Exceptions;
 using Serilog.Formatting.Compact;
+using Serilog.Sinks.File;
+using Serilog.Sinks.SQLite;
 
 namespace Travel.WebApi
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static int Main(string[] args)
         {
             var name = Assembly.GetExecutingAssembly().GetName();
             Log.Logger = new LoggerConfiguration().MinimumLevel.Debug()
@@ -25,7 +27,7 @@ namespace Travel.WebApi
                 .Enrich.WithMachineName()
                 .Enrich.WithProperty("Assembly", $"{name.Name}")
                 .Enrich.WithProperty("Assembly", $"{name.Version}")
-                .WriteTo.SQlite(Environment.CurrentDirectory + @"\Logs\log.db", restrictedToMinimumLevel: LogEventLevel.Information, storeTimestampInUtc: true)
+                .WriteTo.SQLite(Environment.CurrentDirectory + @"\Logs\log.db", restrictedToMinimumLevel: LogEventLevel.Information, storeTimestampInUtc: true)
                 .WriteTo.File(new CompactJsonFormatter(), Environment.CurrentDirectory + @"\Logs\Log.json", rollingInterval: RollingInterval.Day, restrictedToMinimumLevel: LogEventLevel.Information)
                 .WriteTo.Console()
                 
@@ -34,11 +36,18 @@ namespace Travel.WebApi
 
             try
             {
+                Log.Information("Starting host");
                 CreateHostBuilder(args).Build().Run();
+                return 0;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                Log.Fatal(ex, "Host terminated unexpectedly");
+                return 1;
+            }
+            finally
+            {
+                Log.CloseAndFlush();
             }
 
 
@@ -47,6 +56,7 @@ namespace Travel.WebApi
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
+            .UseSerilog()
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
